@@ -2,6 +2,8 @@
 $rootDomain = 'openpanel.org';
 $logFile = __DIR__ . '/do.log';
 
+
+
 // logging
 function logMessage($message) {
     global $logFile;
@@ -29,6 +31,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 $clientIp = explode(',', $clientIp)[0];
 
 logMessage("Client IP: $clientIp");
+
 
 
 
