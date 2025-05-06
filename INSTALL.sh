@@ -26,7 +26,7 @@ chmod -R 755 /var/www/html/domains
 chmod +x /var/www/delete_cron.sh
 
 # PHP
-apt-get install php8.3-fpm php8.3-common -y
+apt-get install php8.3-fpm php8.3-curl php8.3-common -y
 systemctl start php8.3-fpm
 systemctl enable php8.3-fpm
 
