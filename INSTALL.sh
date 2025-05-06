@@ -37,16 +37,24 @@ systemctl daemon-reload
 systemctl restart php8.3-fpm
 
 chown caddy:caddy  /run/php/php8.3-fpm.sock
+chown -R caddy:caddy /var/www
+chown -R caddy:caddy /etc/php
 
 # CRON
 cron_job="*/5 * * * * bash /var/www/delete_cron.sh"
 (crontab -l | grep -q "$cron_job") || (crontab -l; echo "$cron_job") | crontab -
 #crontab -l | sort | uniq | crontab -
 
-# TEST
-# todo:
-# php info
-# caddy
-# domains
-# proxy
-# curl -s -o /dev/null -w "%{url_effective}\n" -X POST https://preview.openpanel.org/index.php      -d "stefan.openpanel.org" -d "ip=159.223.187.25"
+: '
+
+# DEBUG:
+
+curl -X POST https://preview.openpanel.org/index.php \
+  -d "domain=example.com" \
+  -d "ip=1.2.3.4" \
+  -i
+
+
+# TEST: curl -s -o /dev/null -w "%{redirect_url}\n" -X POST https://preview.openpanel.org/index.php -d "domain=example.com" -d "ip=1.2.3.4"
+
+'
