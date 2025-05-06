@@ -9,7 +9,7 @@
 
 http://preview.openpanel.org {
     root * /var/www/html
-    php_fastcgi unix//run/php-fpm/www.sock
+    php_fastcgi unix//run/php/php8.3-fpm.sock
     file_server 
     header {
         Access-Control-Allow-Origin "*"
@@ -23,7 +23,7 @@ http://preview.openpanel.org {
 
 https://preview.openpanel.org {
     root * /var/www/html
-    php_fastcgi unix//run/php-fpm/www.sock
+    php_fastcgi unix//run/php/php8.3-fpm.sock
     file_server
     header {
     Access-Control-Allow-Origin "*"
@@ -41,7 +41,7 @@ https://preview.openpanel.org {
 http://*.openpanel.org {
     root * /var/www/html/domains/{labels.2}/
     try_files {path} /index.php
-    php_fastcgi unix//run/php-fpm/www.sock
+    php_fastcgi unix//run/php/php8.3-fpm.sock
     file_server
 
     # Set CORS headers
@@ -59,7 +59,7 @@ http://*.openpanel.org {
 https://*.openpanel.org {
     root * /var/www/html/domains/{labels.2}/
     try_files {path} /index.php
-    php_fastcgi unix//run/php-fpm/www.sock
+    php_fastcgi unix//run/php/php8.3-fpm.sock
     file_server
 
     # Set CORS headers
