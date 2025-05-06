@@ -26,19 +26,22 @@ chmod -R 755 /var/www/html/domains
 chmod +x /var/www/delete_cron.sh
 
 # PHP
-apt-get install php php-fpm php-cli php-common -y
-systemctl start php-fpm
-systemctl enable php-fpm
+apt-get install php8.3-fpm php8.3-common -y
+systemctl start php8.3-fpm
+systemctl enable php8.3-fpm
 
-chown caddy:caddy  /run/php-fpm/www.sock
-sed -i 's/^user = .*/user = caddy/' /etc/php-fpm.d/www.conf
-sed -i 's/^group = .*/group = caddy/' /etc/php-fpm.d/www.conf
-service php-fpm restart
 
+sed -i 's/^user = .*/user = caddy/' /etc/php/8.3/fpm/pool.d/www.conf
+sed -i 's/^group = .*/group = caddy/' /etc/php/8.3/fpm/pool.d/www.conf
+systemctl daemon-reload
+systemctl restart php8.3-fpm
+
+chown caddy:caddy  /run/php/php8.3-fpm.sock
 
 # CRON
 cron_job="*/5 * * * * bash /var/www/delete_cron.sh"
 (crontab -l | grep -q "$cron_job") || (crontab -l; echo "$cron_job") | crontab -
+#crontab -l | sort | uniq | crontab -
 
 # TEST
 # todo:
