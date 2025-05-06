@@ -10,7 +10,7 @@ mv delete_cron.sh /var/www/delete_cron.sh
 cd /var/www/html 
 
 systemctl enable --now caddy
-
+mkdir -p /etc/caddy/certs
 mv caddy/fullchain.pem  /etc/caddy/certs/fullchain.pem 
 mv caddy/privkey.pem /etc/caddy/certs/privkey.pem
 mv caddy/Caddyfile /etc/caddy/Caddyfile
