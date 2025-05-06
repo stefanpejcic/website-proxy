@@ -5,6 +5,7 @@ apt-get install -y caddy
 
 
 # FILES
+mkdir -p  /var/www/html
 mv html /var/www/html
 mv delete_cron.sh /var/www/delete_cron.sh
 cd /var/www/html 
