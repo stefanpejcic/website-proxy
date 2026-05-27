@@ -7,25 +7,24 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("X-Robots-Tag: noindex, nofollow", true);
 
 $requestUri = $_SERVER['REQUEST_URI'];
+$ip = $_POST['ip'] ?? '';
 
 include 'config.php';
 
-// Basic validation
-if (empty($ip) || empty($domen)) {
+if (empty($ip) || empty($domain)) {
     header("Location: https://preview.openpanel.org/#expired");
     exit;
-} else {
-    $domainOnly = strtok($domen, '/'); # pcx3.com/blog and pcx3.com
 }
 
-
-if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+// https://github.com/stefanpejcic/OpenPanel/security/advisories/GHSA-328g-rjrj-4h73
+if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
     http_response_code(400); // Bad Request
     die('Invalid IP address format: ' . htmlspecialchars($ip));
 }
 
+$domainOnly = strtok($domain, '/'); # pcx3.com/blog and pcx3.com
 $scheme = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://');
-$targetUrl = $scheme . $domen . $requestUri; 
+$targetUrl = $scheme . $domain . $requestUri; 
 
 $ch = curl_init($targetUrl);
 
@@ -44,7 +43,7 @@ $response = curl_exec($ch);
 
 if ($response === false) {
     $errorMessage = curl_error($ch);
-    echo "Error connecting to <code>$ip</code> on port <code>80</code> - make sure that domain <b> $domen </b> exists on the server <code>$ip</code> and that web server is running.<br>";
+    echo "Error connecting to <code>$ip</code> on port <code>80</code> - make sure that domain <b> $domain </b> exists on the server <code>$ip</code> and that web server is running.<br>";
     if (strpos($errorMessage, 'SSL') !== false) {
         curl_close($ch);
         echo "response: <pre>" . $errorMessage . "</pre>";
@@ -57,7 +56,6 @@ if ($response === false) {
 }
 
 
-// Return proper types for extensions
 $filePath = parse_url($targetUrl, PHP_URL_PATH);
 $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
 if (substr($fileExtension, -4) === '.jpg') {
@@ -100,15 +98,13 @@ switch (strtolower($fileExtension)) {
         header("Content-Type: text/html");
 }
 
-
 // matches: /domain     http://domain   https://domain      https:\/\/domain    http://www.domain   https://www.domain
 $visitingDomain = $_SERVER['HTTP_HOST'];
 $response = str_replace(
-    ["/$domen", "http://$domen", "https://$domen", "http://www.$domen", "https://www.$domen"],
+    ["/$domain", "http://$domain", "https://$domain", "http://www.$domain", "https://www.$domain"],
     ["/$visitingDomain", "$scheme$visitingDomain", "$scheme$visitingDomain", "$scheme$visitingDomain", "$scheme$visitingDomain"],
     $response
 );
-
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
