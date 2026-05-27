@@ -7,7 +7,6 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("X-Robots-Tag: noindex, nofollow", true);
 
 $requestUri = $_SERVER['REQUEST_URI'];
-$ip = $_POST['ip'] ?? '';
 
 include 'config.php';
 
