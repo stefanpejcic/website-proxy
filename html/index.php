@@ -89,6 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    // https://github.com/stefanpejcic/OpenPanel/security/advisories/GHSA-328g-rjrj-4h73
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        exit("Error: Invalid IP.");
+    }
+
     $subdomain = generateRandomSubdomain($fake_domain);
     $subdomainPart = explode('.', $subdomain)[0];
     $destinationDir = "/var/www/html/domains/$subdomainPart";
