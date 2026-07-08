@@ -122,7 +122,7 @@ if (!mkdir($destinationDir, 0755, true)) {
 
     // config to use for proxy
     $configFilePath = "$destinationDir/config.php";
-    $configContent = "<?php\n\$domen = '$fake_domain';\n\$ip = '$ip';\n";
+    $configContent = "<?php\n\$domain = '$fake_domain';\n\$ip = '$ip';\n";
     if (file_put_contents($configFilePath, $configContent) === false) {
         logMessage("Failed to create config file: $configFilePath");
         exit("Error: Failed to create config file.");
